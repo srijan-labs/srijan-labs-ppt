@@ -22,21 +22,26 @@
             --accent-purple: #818CF8;
             --accent-red: #EF4444;
             --accent-yellow: #FCD34D;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
+            /* Pro Level Glass Variables */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --card-hover-bg: rgba(255, 255, 255, 0.07);
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Outfit', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
             line-height: 1.5;
+            /* Subtle texture for premium feel */
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0B0F19 60%); 
         }
 
         /* --- 2. LAYOUT UTILITIES --- */
         section.slide {
-            min-height: 100vh; /* Full screen height per section */
+            min-height: 100vh; 
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -48,10 +53,7 @@
             position: relative;
         }
 
-        /* FIX 2: Ensure enough top padding so badge doesn't overlap title */
-        #hero {
-            padding-top: 120px; 
-        }
+        #hero { padding-top: 140px; }
 
         .container {
             max-width: 1200px;
@@ -63,17 +65,15 @@
         h1 {
             font-size: clamp(60px, 8vw, 120px);
             font-weight: 900;
-            line-height: 1.3; /* FIX 1: Increased line-height to prevent "j" cutoff */
-            padding-bottom: 10px; /* Extra padding for safety */
+            line-height: 1.2;
+            padding-bottom: 0.2em;
             margin-bottom: 20px;
             background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Default visible */
             opacity: 1; 
-            transform: translateY(0);
-            transition: all 0.8s ease-out;
-            display: inline-block; /* Helps with background clip and height calc */
+            display: inline-block;
+            text-shadow: 0 10px 30px rgba(56, 189, 248, 0.3); /* Glow text */
         }
 
         h2 {
@@ -99,443 +99,331 @@
             display: inline-block;
         }
 
-        /* ANIMATION CLASS - Applied by JS */
-        .visible h1, .visible h2, .visible p.lead, .visible .sketch-text, .visible .reveal-item {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* --- 4. PRO LEVEL CARD STYLES --- */
         
-        /* FORCE VISIBILITY FOR FIRST SLIDE ELEMENTS (CSS Override) */
-        #slide-1 h1, #slide-1 p.lead, #slide-1 .sketch-text {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-        }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 100%; margin-top: 40px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 50px; width: 100%; margin-top: 40px; align-items: center; }
 
-        /* --- 4. VISUALS & INTERACTIVITY --- */
-        
-        /* CUSTOM ANIMATIONS FOR SLIDE 3 */
-        @keyframes rust {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(15deg); } 
-            25% { transform: rotate(10deg); } 
-            45% { transform: rotate(10deg); } 
-            60% { transform: rotate(180deg); } 
-            70% { transform: rotate(175deg); } 
-            100% { transform: rotate(360deg); } 
-        }
-
-        @keyframes chaos {
-            0% { transform: scale(1); opacity: 1; color: var(--accent-blue); }
-            10% { transform: scale(1.2) rotate(5deg); opacity: 0.8; color: #fff; }
-            20% { transform: scale(0.9) rotate(-5deg); opacity: 1; color: #F472B6; } 
-            40% { transform: scale(1.1); opacity: 1; color: var(--accent-blue); }
-            60% { transform: scale(1.3) rotate(10deg); opacity: 1; color: #34D399; } 
-            80% { transform: scale(0.9); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; color: var(--accent-blue); }
-        }
-
-        .icon-broken {
-            animation: rust 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-            color: var(--accent-red);
-            transform-origin: center;
-        }
-
-        .icon-chaotic {
-            animation: chaos 0.6s linear infinite;
-            color: var(--accent-blue);
-        }
-
-        /* Comparison Layout */
-        .comparison-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px; 
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 60px;
-            justify-content: center;
-        }
-
-        .comparison-column {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(255,255,255,0.03);
-            padding: 60px 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.4s;
+        /* General Pro Card Base */
+        .pro-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); /* Glass effect */
+            -webkit-backdrop-filter: blur(12px);
+            border: var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--glass-shadow);
             position: relative;
             overflow: hidden;
         }
+
+        .pro-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .pro-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: var(--card-hover-bg);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(56, 189, 248, 0.1); /* Glow */
+        }
         
-        .comparison-column.left { border-top: 5px solid var(--accent-red); }
-        .comparison-column.right { border-top: 5px solid var(--accent-blue); }
+        .pro-card:hover::before { opacity: 1; }
+
+        /* Specific Styling for Flux/USP Items */
+        .flux-item {
+            @extend .pro-card; /* Conceptually extending */
+            text-align: center;
+        }
+        
+        .flux-item i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: inline-block;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); /* Icon Shadow */
+            transition: transform 0.3s;
+        }
+        
+        .flux-item:hover i { transform: scale(1.1) rotate(5deg); color: #fff !important; }
+
+        .flux-item h3 { font-size: 24px; color: #fff; margin-bottom: 10px; font-weight: 700; }
+        .flux-item p { font-size: 17px; color: #94A3B8; line-height: 1.6; font-weight: 300; }
+
+        /* Styling for Model Cards (SALD) */
+        .model-card {
+            background: rgba(15, 23, 42, 0.6); /* Slightly darker for contrast */
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .model-card::after {
+            content: '';
+            position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+            background: var(--accent-blue);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .model-card:hover {
+            transform: translateX(10px);
+            background: rgba(56, 189, 248, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .model-card h3 { 
+            color: #fff; 
+            font-size: 32px; 
+            margin-bottom: 5px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .model-card h3 i { font-size: 28px; color: var(--accent-blue); }
+        .model-card p { font-size: 20px; color: #94A3B8; margin-left: 48px; /* Indent under text */ }
+
+        /* Comparison Graphic */
+        .comparison-box {
+            padding: 60px 40px;
+            border-radius: 24px;
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .comp-left { border-top: 4px solid var(--accent-red); background: linear-gradient(180deg, rgba(239,68,68,0.05) 0%, transparent 100%); }
+        .comp-right { border-top: 4px solid var(--accent-blue); background: linear-gradient(180deg, rgba(56,189,248,0.05) 0%, transparent 100%); }
 
         .graphic-box {
-            height: 150px;
+            height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 30px;
-            font-size: 100px;
-        }
-        
-        /* Flux Icons / USP Cards */
-        .flux-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-top: 60px;
-            justify-content: center;
-        }
-        .flux-item {
-            background: rgba(255,255,255,0.03);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            width: 320px; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        .flux-item:hover { 
-            transform: translateY(-15px) scale(1.05); 
-            background: rgba(255,255,255,0.08); 
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
-        }
-        .flux-item i { transition: transform 0.3s; }
-        .flux-item:hover i { transform: scale(1.2); color: #fff; }
-        
-        /* USP Description Text */
-        .flux-desc {
-            color: #94A3B8;
-            font-size: 18px;
-            margin-top: 15px;
-            line-height: 1.5;
-            font-weight: 300;
+            font-size: 90px;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
         }
 
-        /* Wall Visual */
-        .wall-container {
-            display: flex;
-            gap: 60px;
-            align-items: center;
-            margin-top: 60px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .school-block {
-            text-align: center;
-            opacity: 0.6;
-            transition: all 0.5s;
-            padding: 20px;
-            border-radius: 12px;
-        }
-        .school-block:hover {
-            opacity: 1;
-            background: rgba(255,255,255,0.05);
-            transform: scale(1.1);
-        }
-        
-        /* FIX 3: Animating the Wall */
-        @keyframes wallPulse {
-            0% { height: 150px; opacity: 0.5; }
-            50% { height: 180px; opacity: 1; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
-            100% { height: 150px; opacity: 0.5; }
-        }
+        /* --- 5. ANIMATIONS --- */
+        @keyframes rust { 0% { transform: rotate(0deg); } 20% { transform: rotate(15deg); } 25% { transform: rotate(10deg); } 45% { transform: rotate(10deg); } 60% { transform: rotate(180deg); } 70% { transform: rotate(175deg); } 100% { transform: rotate(360deg); } }
+        .anim-rust { animation: rust 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; color: var(--accent-red); }
 
-        .wall-divider {
-            width: 20px;
-            height: 150px;
-            background: repeating-linear-gradient(45deg, #EF4444, #EF4444 10px, #7F1D1D 10px, #7F1D1D 20px);
-            border-radius: 4px;
-            /* Applied Animation */
-            animation: wallPulse 3s ease-in-out infinite; 
-            transition: height 0.3s;
-        }
-        
-        /* Interactive: Shrink on hover */
-        .wall-container:hover .wall-divider {
-            animation: none; /* Pause pulse */
-            height: 50px; /* Shrink/Break */
-            opacity: 0.3;
-            filter: grayscale(100%);
-        }
+        @keyframes chaos { 0% { transform: scale(1); opacity: 1; color: var(--accent-blue); } 10% { transform: scale(1.2) rotate(5deg); opacity: 0.8; color: #fff; } 20% { transform: scale(0.9) rotate(-5deg); opacity: 1; color: #F472B6; } 40% { transform: scale(1.1); opacity: 1; color: var(--accent-blue); } 60% { transform: scale(1.3) rotate(10deg); opacity: 1; color: #34D399; } 80% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1); opacity: 1; color: var(--accent-blue); } }
+        .anim-chaos { animation: chaos 0.5s linear infinite; }
 
-        /* Model Grid */
-        .model-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
-            text-align: left;
-            width: 100%;
-            max-width: 1100px;
-        }
-        .model-card {
-            background: rgba(255,255,255,0.03);
-            padding: 40px;
-            border-radius: 16px;
-            border-left: 6px solid var(--accent-blue);
-            transition: all 0.3s;
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-        .model-card:hover { 
-            transform: translateX(10px); 
-            background: rgba(56, 189, 248, 0.1); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .model-card h3 { transition: color 0.3s; }
-        .model-card:hover h3 { color: #fff; }
+        @keyframes wallPulse { 0% { height: 150px; opacity: 0.5; } 50% { height: 180px; opacity: 1; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); } 100% { height: 150px; opacity: 0.5; } }
+        .anim-wall { width: 12px; height: 150px; background: repeating-linear-gradient(45deg, #EF4444, #EF4444 10px, #7F1D1D 10px, #7F1D1D 20px); border-radius: 6px; animation: wallPulse 3s ease-in-out infinite; transition: height 0.3s; }
+        .wall-container:hover .anim-wall { animation: none; height: 50px; opacity: 0.3; filter: grayscale(100%); }
 
-        /* --- 5. UI ELEMENTS --- */
-        /* FIX 2: Badge positioned top-left of the first slide container, not fixed to screen */
+        /* --- 6. UI ELEMENTS --- */
         .tfi-badge {
-            position: absolute; 
-            top: 40px;
-            left: 40px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            z-index: 100;
-            background: rgba(11, 15, 25, 0.9);
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
+            position: absolute; top: 40px; left: 40px;
+            font-size: 13px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 2px; z-index: 100;
+            background: rgba(11, 15, 25, 0.95); padding: 10px 20px;
+            border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-            color: var(--accent-blue);
-            font-size: 30px;
-            cursor: pointer;
-            transition: color 0.3s;
+        .scroll-down {
+            margin-top: 40px; font-size: 30px; color: var(--accent-blue); animation: bounce 2s infinite; cursor: pointer;
         }
-        .scroll-indicator:hover { color: #fff; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
-            40% {transform: translateY(-10px) translateX(-50%);}
-            60% {transform: translateY(-5px) translateX(-50%);}
-        }
-
-        .slide-counter {
-            position: fixed;
-            bottom: 30px;
-            right: 40px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            color: #64748B;
-            font-size: 18px;
-            background: rgba(11, 15, 25, 0.8);
-            padding: 5px 15px;
-            border-radius: 20px;
-            z-index: 100;
-        }
+        /* Wall container */
+        .wall-container { display: flex; gap: 60px; align-items: center; margin-top: 60px; flex-wrap: wrap; justify-content: center; }
+        .school-block { text-align: center; opacity: 0.6; transition: all 0.5s; padding: 30px; border-radius: 16px; }
+        .school-block:hover { opacity: 1; background: rgba(255,255,255,0.05); transform: scale(1.1); }
 
     </style>
 </head>
 <body>
 
-    <div class="slide-counter" id="counter">01 / 09</div>
-
     <!-- SLIDE 1: HERO -->
-    <section class="slide visible" id="hero">
-        <!-- Badge RESTRICTED to this slide section -->
+    <section class="slide" id="hero">
         <div class="tfi-badge">Backed by Teach For India</div>
         
-        <h1>Srijan Labs</h1>
-        <p class="lead" style="margin-top: 20px;">An immersive learning space nurturing awareness, agency, and collaborative leadership.</p>
-        <p class="sketch-text">(Scroll Down to Explore)</p>
-        <div class="scroll-indicator" onclick="document.getElementById('problem').scrollIntoView()"><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="container">
+            <h1>Srijan Labs</h1>
+            <p class="lead" style="margin-top: 20px;">An immersive learning space nurturing awareness, agency, and collaborative leadership.</p>
+            <p class="sketch-text">(Scroll Down to Explore)</p>
+            <div class="scroll-down" onclick="document.getElementById('problem').scrollIntoView()"><i class="fa-solid fa-chevron-down"></i></div>
+        </div>
     </section>
 
-    <!-- SLIDE 2: THE CORE PROBLEM (World in Flux) -->
+    <!-- SLIDE 2: WORLD IN FLUX -->
     <section class="slide" id="problem">
-        <h2>The World is in Flux</h2>
-        <p class="lead">We are preparing students for a future that is volatile, uncertain, and rapidly changing. The old maps no longer work.</p>
-        
-        <div class="flux-container">
-            <div class="flux-item reveal-item" style="transition-delay: 0.1s;">
-                <i class="fa-solid fa-robot" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 20px;"></i>
-                <h3 style="color: #E2E8F0; font-size: 24px; margin-bottom: 10px;">AI & Automation</h3>
-                <p class="flux-desc">Redefining the nature of work and the skills needed to thrive.</p>
-            </div>
-            <div class="flux-item reveal-item" style="transition-delay: 0.2s;">
-                <i class="fa-solid fa-cloud-bolt" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 20px;"></i>
-                <h3 style="color: #E2E8F0; font-size: 24px; margin-bottom: 10px;">Uncertainty</h3>
-                <p class="flux-desc">Navigating complex global crises where answers are not predefined.</p>
-            </div>
-            <div class="flux-item reveal-item" style="transition-delay: 0.3s;">
-                <i class="fa-solid fa-users-viewfinder" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 20px;"></i>
-                <h3 style="color: #E2E8F0; font-size: 24px; margin-bottom: 10px;">Social Change</h3>
-                <p class="flux-desc">Evolving communities requiring new forms of empathy and connection.</p>
+        <div class="container">
+            <h2>The World is in Flux</h2>
+            <p class="lead">We are preparing students for a future that is volatile, uncertain, and rapidly changing. The old maps no longer work.</p>
+            
+            <div class="grid-3">
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-robot" style="color: var(--accent-blue);"></i>
+                    <h3>AI & Automation</h3>
+                    <p class="flux-desc">Redefining the nature of work and the skills needed to thrive.</p>
+                </div>
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-bolt" style="color: var(--accent-blue);"></i>
+                    <h3>Uncertainty</h3>
+                    <p class="flux-desc">Navigating complex global crises where answers are not predefined.</p>
+                </div>
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-users-viewfinder" style="color: var(--accent-blue);"></i>
+                    <h3>Social Shift</h3>
+                    <p class="flux-desc">Evolving communities requiring new forms of empathy and connection.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- SLIDE 3: THE MISMATCH (Icons Matched & Animated) -->
+    <!-- SLIDE 3: THE MISMATCH -->
     <section class="slide" id="mismatch">
-        <h2>The Dangerous Mismatch</h2>
-        <p class="lead">Our education system was built for a stable past, not a chaotic future.</p>
-        
-        <div class="comparison-container">
-            <!-- Left: Current Curriculum (Hourglass - Rust Animation) -->
-            <div class="comparison-column left reveal-item" style="transition-delay: 0.1s;">
-                <h3 style="color: #EF4444; font-size: 28px; margin-bottom: 20px;">Current Curriculum</h3>
-                <div class="graphic-box">
-                    <i class="fa-solid fa-hourglass-end icon-broken"></i>
+        <div class="container">
+            <h2>The Dangerous Mismatch</h2>
+            <p class="lead">Our education system was built for a stable past, not a chaotic future.</p>
+            
+            <div class="grid-2">
+                <div class="comparison-box comp-left">
+                    <div class="graphic-box">
+                        <i class="fa-solid fa-hourglass-end icon-large anim-rust"></i>
+                    </div>
+                    <h3 style="color: var(--accent-red); margin-bottom: 10px;">Current Curriculum</h3>
+                    <p style="color: #94A3B8; font-size: 20px;">Static. Rote. Linear.<br>Out of Sync.</p>
                 </div>
-                <p style="color: #94A3B8; font-size: 20px;">Static. Rote. Linear.<br>Out of Sync.</p>
-            </div>
 
-            <!-- Right: Changing World (Bolt - Chaos Animation) -->
-            <div class="comparison-column right reveal-item" style="transition-delay: 0.3s;">
-                <h3 style="color: var(--accent-blue); font-size: 28px; margin-bottom: 20px;">The Real World</h3>
-                <div class="graphic-box">
-                    <i class="fa-solid fa-bolt icon-chaotic"></i>
+                <div class="comparison-box comp-right">
+                    <div class="graphic-box">
+                        <i class="fa-solid fa-bolt icon-large anim-chaos"></i>
+                    </div>
+                    <h3 style="color: var(--accent-blue); margin-bottom: 10px;">The Real World</h3>
+                    <p style="color: #94A3B8; font-size: 20px;">Fast. Fluid. Complex.<br>Hyper-Connected.</p>
                 </div>
-                <p style="color: #94A3B8; font-size: 20px;">Fast. Fluid. Complex.<br>Hyper-Connected.</p>
             </div>
         </div>
     </section>
 
-    <!-- SLIDE 4: THE GAP (Invisible Wall) -->
+    <!-- SLIDE 4: THE INVISIBLE WALL -->
     <section class="slide" id="gap">
-        <h2>The Invisible Wall</h2>
-        <p class="lead">While the world demands collaboration, our schools operate in silos.</p>
-        
-        <div class="wall-container">
-            <div class="school-block">
-                <i class="fa-solid fa-school" style="font-size: 100px; color: #CBD5E1;"></i>
-                <br><span style="font-size: 32px; color: #94A3B8; margin-top: 15px; display:block;">Public</span>
+        <div class="container">
+            <h2>The Invisible Wall</h2>
+            <p class="lead">While the world demands collaboration, our schools operate in silos.</p>
+            
+            <div class="wall-container">
+                <div class="school-block">
+                    <i class="fa-solid fa-school" style="font-size: 100px; color: #CBD5E1;"></i>
+                    <br><span style="font-size: 32px; color: #fff; margin-top: 15px; display:block;">Public</span>
+                </div>
+                
+                <div class="anim-wall"></div>
+                
+                <div class="school-block">
+                    <i class="fa-solid fa-building-columns" style="font-size: 100px; color: #CBD5E1;"></i>
+                    <br><span style="font-size: 32px; color: #fff; margin-top: 15px; display:block;">Private</span>
+                </div>
             </div>
             
-            <!-- FIX 3: Animated Wall Divider -->
-            <div class="wall-divider"></div>
-            
-            <div class="school-block">
-                <i class="fa-solid fa-building-columns" style="font-size: 100px; color: #CBD5E1;"></i>
-                <br><span style="font-size: 32px; color: #94A3B8; margin-top: 15px; display:block;">Private</span>
-            </div>
+            <p class="sketch-text" style="color: var(--accent-red); margin-top: 40px;">Talent is distributed equally. Opportunity is not.</p>
         </div>
-        <p class="sketch-text" style="color: var(--accent-red); margin-top: 40px;">Talent is distributed equally. Opportunity is not.</p>
     </section>
 
     <!-- SLIDE 5: THE SOLUTION INTRO -->
     <section class="slide" id="solution">
-        <h2 style="font-size: clamp(40px, 6vw, 80px); max-width: 1200px; line-height: 1.2;">"We don't need better textbooks.<br><span style="color: var(--accent-blue);">We need shared spaces."</span></h2>
-        <p class="lead" style="margin-top: 50px;">Transformation happens when we cross the divide.</p>
+        <div class="container">
+            <h2 style="font-size: clamp(40px, 6vw, 80px); line-height: 1.2;">"We don't need better textbooks.<br><span style="color: var(--accent-blue);">We need shared spaces."</span></h2>
+            <p class="lead" style="margin-top: 40px;">Transformation happens when we cross the divide.</p>
+        </div>
     </section>
 
     <!-- SLIDE 6: THE SALD MODEL -->
     <section class="slide" id="model">
-        <h2>The SALD Model</h2>
-        <p class="lead">A proprietary framework to build human capacity.</p>
-        
-        <div class="model-grid">
-            <div class="model-card reveal-item" style="transition-delay: 0.1s;">
-                <h3 style="color: var(--accent-blue); font-size: 36px; margin-bottom: 10px;"><i class="fa-solid fa-eye"></i> 1. See</h3>
-                <p style="color: #CBD5E1; font-size: 22px;">Awareness of self & system.</p>
-            </div>
-            <div class="model-card reveal-item" style="transition-delay: 0.2s;">
-                <h3 style="color: var(--accent-blue); font-size: 36px; margin-bottom: 10px;"><i class="fa-solid fa-hand-fist"></i> 2. Act</h3>
-                <p style="color: #CBD5E1; font-size: 22px;">Agency to take initiative.</p>
-            </div>
-            <div class="model-card reveal-item" style="transition-delay: 0.3s;">
-                <h3 style="color: var(--accent-blue); font-size: 36px; margin-bottom: 10px;"><i class="fa-solid fa-users"></i> 3. Lead</h3>
-                <p style="color: #CBD5E1; font-size: 22px;">Collaborative leadership.</p>
-            </div>
-            <div class="model-card reveal-item" style="transition-delay: 0.4s;">
-                <h3 style="color: var(--accent-blue); font-size: 36px; margin-bottom: 10px;"><i class="fa-solid fa-lightbulb"></i> 4. Design</h3>
-                <p style="color: #CBD5E1; font-size: 22px;">Solving real-world problems.</p>
+        <div class="container">
+            <h2>The SALD Model</h2>
+            <p class="lead">A proprietary framework to build human capacity.</p>
+            
+            <div class="grid-2" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="model-card">
+                    <h3><i class="fa-solid fa-eye"></i> See</h3>
+                    <p>Awareness of self & system.</p>
+                </div>
+                <div class="model-card">
+                    <h3><i class="fa-solid fa-hand-fist"></i> Act</h3>
+                    <p>Agency to take initiative.</p>
+                </div>
+                <div class="model-card">
+                    <h3><i class="fa-solid fa-users"></i> Lead</h3>
+                    <p>Collaborative leadership.</p>
+                </div>
+                <div class="model-card">
+                    <h3><i class="fa-solid fa-lightbulb"></i> Design</h3>
+                    <p>Solving real-world problems.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- SLIDE 7: UNIQUE VALUE (With Descriptions) -->
+    <!-- SLIDE 7: USP -->
     <section class="slide" id="usp">
-        <h2>What Makes Us Unique?</h2>
-        <div class="flux-container">
-            <div class="flux-item reveal-item" style="text-align: center; transition-delay: 0.1s;">
-                <i class="fa-solid fa-bridge" style="font-size: 80px; color: var(--accent-yellow); margin-bottom: 20px;"></i>
-                <p style="font-size: 24px; margin-top: 10px; font-weight: bold; color: #E2E8F0;">Bridging Ecosystems</p>
-                <p class="flux-desc">Actively breaking the "invisible wall" by creating shared learning spaces where public and private school students learn together.</p>
-            </div>
-            <div class="flux-item reveal-item" style="text-align: center; transition-delay: 0.2s;">
-                <i class="fa-solid fa-brain" style="font-size: 80px; color: var(--accent-yellow); margin-bottom: 20px;"></i>
-                <p style="font-size: 24px; margin-top: 10px; font-weight: bold; color: #E2E8F0;">Meta-Learning</p>
-                <p class="flux-desc">Teaching students the "operating system" of learning—how to reflect, adapt, and evolve their own thinking.</p>
-            </div>
-            <div class="flux-item reveal-item" style="text-align: center; transition-delay: 0.3s;">
-                <i class="fa-solid fa-earth-africa" style="font-size: 80px; color: var(--accent-yellow); margin-bottom: 20px;"></i>
-                <p style="font-size: 24px; margin-top: 10px; font-weight: bold; color: #E2E8F0;">Global Context</p>
-                <p class="flux-desc">Bringing in international perspectives on SEL and art-based identity work through our partnership with FacesUp Uganda.</p>
+        <div class="container">
+            <h2>What Makes Us Unique?</h2>
+            
+            <div class="grid-3">
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-bridge" style="color: var(--accent-yellow);"></i>
+                    <h3>Bridging Ecosystems</h3>
+                    <p>Actively breaking the "invisible wall" by creating shared learning spaces where public and private school students learn together.</p>
+                </div>
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-brain" style="color: var(--accent-yellow);"></i>
+                    <h3>Meta-Learning</h3>
+                    <p>Teaching students the "operating system" of learning—how to reflect, adapt, and evolve their own thinking patterns.</p>
+                </div>
+                <div class="pro-card flux-item">
+                    <i class="fa-solid fa-earth-africa" style="color: var(--accent-yellow);"></i>
+                    <h3>Global Context</h3>
+                    <p>Bringing in international perspectives on SEL and art-based identity work through our partnership with FacesUp Uganda.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- SLIDE 8: FOUNDERS -->
     <section class="slide" id="founders">
-        <div class="reveal-item">
-            <i class="fa-solid fa-chalkboard-user" style="font-size: 100px; color: var(--accent-blue); margin-bottom: 40px; transition: transform 0.5s;"></i>
-        </div>
-        <h2>From Classroom to System</h2>
-        <p class="lead">Founded by Raja & Prabhanshu</p>
-        <p class="lead" style="font-size: 20px; opacity: 0.7; margin-top: 10px;">Teach For India Alumni (2021-23)</p>
-        
-        <div style="margin-top: 60px; max-width: 800px; border-top: 1px solid #334155; padding-top: 40px;" class="reveal-item">
-            <p style="font-family: 'Patrick Hand', cursive; color: #94A3B8; font-size: 36px;">"We realized true change isn't in policy. It's in the mindset of the learner."</p>
+        <div class="container">
+            <i class="fa-solid fa-chalkboard-user" style="font-size: 100px; color: var(--accent-blue); margin-bottom: 40px;"></i>
+            <h2>From Classroom to System</h2>
+            <p class="lead" style="font-weight: 700; color: #fff;">Founded by Raja & Prabhanshu</p>
+            <p class="lead" style="font-size: 20px; opacity: 0.7; margin-top: 10px;">Teach For India Alumni (2021-23)</p>
+            
+            <div style="margin-top: 40px; border-top: 1px solid #334155; padding-top: 40px;">
+                <p class="sketch-text" style="color: #94A3B8; font-size: 36px;">"We realized true change isn't in policy. It's in the mindset of the learner."</p>
+            </div>
         </div>
     </section>
 
     <!-- SLIDE 9: CTA -->
     <section class="slide" id="cta">
-        <h2>Join the Movement</h2>
-        <p class="lead" style="margin-bottom: 60px;">Partner with us to reimagine education.</p>
-        <a href="mailto:info@srijanlabs.org" class="reveal-item" style="background: var(--accent-blue); color: #0B0F19; text-decoration: none; padding: 25px 60px; font-size: 36px; font-weight: 800; border-radius: 60px; box-shadow: 0 10px 40px rgba(56,189,248,0.3); transition: all 0.3s; display: inline-block;">
-            info@srijanlabs.org
-        </a>
+        <div class="container">
+            <h2>Join the Movement</h2>
+            <p class="lead" style="margin-bottom: 60px;">Partner with us to reimagine education.</p>
+            <a href="mailto:info@srijanlabs.org" style="display: inline-block; background: var(--accent-blue); color: #0B0F19; text-decoration: none; padding: 20px 60px; border-radius: 50px; font-size: 24px; font-weight: 800; transition: transform 0.2s; box-shadow: 0 10px 30px rgba(56,189,248,0.4);">
+                info@srijanlabs.org
+            </a>
+        </div>
     </section>
-
-    <script>
-        // ANIMATION OBSERVER
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    
-                    // Update Counter
-                    const id = entry.target.id;
-                    if(id) {
-                        const num = id.split('-')[1];
-                        // If it's a number, update counter
-                        // Manual mapping since IDs are named now
-                        const allSlides = document.querySelectorAll('section.slide');
-                        const index = Array.from(allSlides).indexOf(entry.target) + 1;
-                        document.getElementById('counter').innerText = `0${index} / 09`;
-                    }
-                }
-            });
-        }, { threshold: 0.3 }); 
-
-        document.querySelectorAll('section.slide').forEach(section => {
-            observer.observe(section);
-        });
-    </script>
 
 </body>
 </html>
-```
